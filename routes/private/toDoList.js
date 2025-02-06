@@ -7,7 +7,7 @@ app.use(express.json())
 
 const router = express.Router()
 
-const prima = new PrismaClient()
+const prisma = new PrismaClient()
 
 routet.post('/todolist', async (req, res) => {
 
@@ -15,8 +15,15 @@ routet.post('/todolist', async (req, res) => {
 
         const {title, description , date} = req.body
 
+        const newToDoList = await prisma.list.create({
+            data: {
+                title,
+                description,
+                date
+            }
+        })
 
-
+        return res.status(201).json({message: "created to do list successfully"})
 
     }catch(error){
         console.error(error)
@@ -25,4 +32,4 @@ routet.post('/todolist', async (req, res) => {
 
 })
 
-
+export default router

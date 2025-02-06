@@ -13,3 +13,13 @@ model User {
   name    String
   password String
 }
+
+model List {
+
+  id   Int   @id @default(autoincrement())
+  title String
+  data DateTime
+  description String
+
+
+}

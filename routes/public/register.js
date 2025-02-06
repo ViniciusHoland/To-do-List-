@@ -3,7 +3,9 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const app = express()
-const router = Router()
+
+app.use(express.json())
+const router = express.Router()
 const prisma = new PrismaClient()
 
 router.post('/register', async (req, res) => {

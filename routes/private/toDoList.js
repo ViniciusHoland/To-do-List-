@@ -9,7 +9,7 @@ const router = express.Router()
 
 const prisma = new PrismaClient()
 
-routet.post('/todolist', async (req, res) => {
+router.post('/todolist', async (req, res) => {
 
     try{
 

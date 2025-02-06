@@ -1,6 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
+import jwt from 'jsonwebtoken'
 
 const app = express()
 
@@ -9,6 +10,8 @@ app.use(express.json())
 const router =  express.Router()
 
 const prisma = new PrismaClient()
+
+const JWT_SECRET  = process.env.JWT_SECRET
 
 router.post('/login', async (req, res) => {
 
@@ -20,11 +23,14 @@ router.post('/login', async (req, res) => {
         if(!user){
             return res.status(404).json({message: 'User not found'})
         }
-        if(user.password === password){
-            res.status(201).json({message: 'Login sucessfully'})
+        if(user.password !== password){
+            
+            return res.status(400).json({message: 'senha incorrect'})
         }
 
-        return res.status(400).json({message: 'senha incorrect'})
+        const token = jwt.sign({id: user.id}, JWT_SECRET, {expiresIn: '1h'})
+
+        return res.status(201).json({message: 'Login sucessfully', token})
 
     }catch(error){
         console.error(error)

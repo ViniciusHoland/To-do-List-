@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
         const userIsExist = await prisma.user.findUnique({where: {email: email}})
 
         if(userIsExist){
-            return res.status(400).json({message: 'user alreay exists, login in '})
+            return res.status(400).json({message: 'user already exists, login in '})
         }
 
         const newUser = await prisma.user.create({

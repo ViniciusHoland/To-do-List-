@@ -83,9 +83,12 @@ router.get('/todolist', async (req,res) => {
             return res.status(404).json({message: 'user not found'})
         }
 
-        const todolist = await prisma.
+        const todoList = await prisma.user.findUnique({
+            where: {id : user.id},
+            include: { list: true}
+        })
 
-        res.status(200).json({message: 'todolist successfully'})
+        res.status(200).json(todoList.list)
 
     }catch(error){
         return res.status(500).json({message: 'Internal Server Error'})

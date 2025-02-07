@@ -12,6 +12,7 @@ model User {
   email   String   @unique
   name    String
   password String
+  list      List []
 }
 
 model List {
@@ -20,6 +21,7 @@ model List {
   title String
   date DateTime
   description String
-
+  userId Int 
+  user User @relation(fields: [userId] , references: [id])
 
 }

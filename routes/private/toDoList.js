@@ -1,6 +1,7 @@
 import express from 'express'
 import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
+import jwt from 'jsonwebtoken'
 
 const app = express()
 app.use(express.json())
@@ -36,6 +37,40 @@ router.post('/todolist', async (req, res) => {
         console.error(error)
         res.status(500).json({ error: 'Internal Server Error' })
     }
+
+})
+
+router.get('/todolist', async (req,res) => {
+
+    try{
+
+        const auth =  req.headers.authorization
+        const token = auth.split(' ')[1]
+
+        if(!token){
+            return res.status(401).json({message: 'Token not provided'})
+        }
+
+        const JWT_SECRET = process.env.JWT_SECRET
+
+        const decodedToken = jwt.verify(token, JWT_SECRET)
+
+        const user = await prisma.user.findUnique({where:{ id : decodedToken.id} })
+
+        if(!user){
+            return res.status(404).json({message: 'user not found'})
+        }
+
+        const todolist = await prisma.
+
+        res.status(200).json({message: 'todolist successfully'})
+
+    }catch(error){
+        return res.status(500).json({message: 'Internal Server Error'})
+    
+    }
+
+
 
 })
 

@@ -18,7 +18,7 @@ model List {
 
   id   Int   @id @default(autoincrement())
   title String
-  data DateTime
+  date DateTime
   description String
 
 

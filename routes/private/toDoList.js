@@ -15,11 +15,18 @@ router.post('/todolist', async (req, res) => {
 
         const {title, description , date} = req.body
 
+        console.log(req.body)
+
+        const [dia, mes , ano] = date.split('/')
+        const dateFormat =  `${ano}-${mes}-${dia}`
+        const newDate = new Date(dateFormat)
+        
+
         const newToDoList = await prisma.list.create({
             data: {
                 title,
                 description,
-                date
+                date: newDate
             }
         })
 

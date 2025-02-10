@@ -16,8 +16,6 @@ router.post('/todolist', async (req, res) => {
 
         const {title, description , date} = req.body
 
-        console.log(req.body)
-
         const [dia, mes , ano] = date.split('/')
         const dateFormat =  `${ano}-${mes}-${dia}`
         const newDate = new Date(dateFormat)
@@ -29,9 +27,9 @@ router.post('/todolist', async (req, res) => {
             return res.status(401).json({message: 'Token not provided or invalid'})
         }
 
-        const JWT_SECRET = process.env.JWT_SECRET
+       
 
-        const decodedToken = jwt.verify(token, JWT_SECRET)
+        const decodedToken = jwt.verify(token,  process.env.JWT_SECRET)
         
         const user = await prisma.user.findUnique({where: { id : decodedToken.id}})
 
@@ -53,7 +51,7 @@ router.post('/todolist', async (req, res) => {
     
         })
 
-        return res.status(201).json({message: "created to do list successfully"})
+        return res.status(201).json({message: "created to do list successfully", newToDoList})
 
     }catch(error){
         console.error(error)
@@ -73,9 +71,7 @@ router.get('/todolist', async (req,res) => {
             return res.status(401).json({message: 'Token not provided or invalid'})
         }
 
-        const JWT_SECRET = process.env.JWT_SECRET
-
-        const decodedToken = jwt.verify(token, JWT_SECRET)
+        const decodedToken = jwt.verify(token,  process.env.JWT_SECRET)
 
         const user = await prisma.user.findUnique({where:{ id : decodedToken.id} })
 

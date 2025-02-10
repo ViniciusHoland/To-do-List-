@@ -1,5 +1,5 @@
 import express from 'express';
-import { Router } from 'express';
+import bcrypt, { hash } from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 
 const app = express()
@@ -14,6 +14,10 @@ router.post('/register', async (req, res) => {
 
         const {name, email , password} = req.body
 
+        const saltRounds = 10
+
+        const hashPassword = await bcrypt.hash(password, saltRounds)
+
 
         const userIsExist = await prisma.user.findUnique({where: {email: email}})
 
@@ -25,7 +29,7 @@ router.post('/register', async (req, res) => {
             data:{
                 name,
                 email,
-                password
+                password: hashPassword
             }
         })
 

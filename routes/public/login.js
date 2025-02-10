@@ -1,6 +1,7 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 
 const app = express()
 
@@ -22,7 +23,10 @@ router.post('/login', async (req, res) => {
         if(!user){
             return res.status(404).json({message: 'User not found'})
         }
-        if(user.password !== password){
+
+        const hashPassword = await bcrypt.compare(password, user.password)
+
+        if(!hashPassword){
             
             return res.status(400).json({message: 'senha incorrect'})
         }

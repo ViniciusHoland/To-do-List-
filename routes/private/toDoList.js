@@ -85,13 +85,6 @@ router.put('/todolist', async (req, res) => {
             return res.status(401).json({ message: 'User not found' })
         }
 
-        const updateList = await prisma.user.findMany({
-            where: { id: userId },
-            include: {list : true}
-        })
-
-        const list = updateList[0].list
-
         const updateToDoList =  await prisma.list.update({
             where: {id : idList},
             data: {
@@ -108,6 +101,41 @@ router.put('/todolist', async (req, res) => {
         console.error(error)
         res.status(500).json({ message: 'Internal Server Error' })
     }
+
+
+})
+
+
+router.delete('/todolist', async (req,res) => {
+
+    try{
+
+        const { idList } = req.body
+
+        const userId = req.userId
+
+        if(!userId){
+            return res.status(401).json({ message: 'User not found' })
+        }
+
+
+        const todoListDelete = await prisma.list.delete({
+            where : {id: idList}
+        }) 
+
+
+        if(!todoListDelete){
+            return res.status(404).json({ message: 'List not found' })
+        }
+
+        res.status(200).json({message: 'List deleted successfully', todoListDelete : todoListDelete})
+
+
+    }catch (error){
+        console.error(error)
+        res.status(500).json({ message: 'Id list not found' })
+    }
+
 
 
 })

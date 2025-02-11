@@ -20,7 +20,8 @@ function verifyToken(req, res, next){
 
         const JWT_SECRET = process.env.JWT_SECRET
 
-        const data = jwt.verify(token, JWT_SECRET)
+        const decoded = jwt.verify(token, JWT_SECRET)
+        req.userId = decoded.id
 
         next()
 

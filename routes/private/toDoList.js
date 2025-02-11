@@ -42,7 +42,7 @@ router.post('/todolist', async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Internal Server Error for created investment' })
+        res.status(500).json({ error: 'Internal Server Error for created to-do list' })
     }
 
 })
@@ -57,6 +57,10 @@ router.get('/todolist', async (req, res) => {
             where: { id: userId },
             include: { list: true }
         })
+
+        if (!todoList || !todoList.list.length ) {
+            return res.status(404).json({ message: 'no to-do list', lists: [] })
+        }
 
         res.status(200).json(todoList.list)
 
@@ -122,11 +126,6 @@ router.delete('/todolist', async (req,res) => {
         const todoListDelete = await prisma.list.delete({
             where : {id: idList}
         }) 
-
-
-        if(!todoListDelete){
-            return res.status(404).json({ message: 'List not found' })
-        }
 
         res.status(200).json({message: 'List deleted successfully', todoListDelete : todoListDelete})
 
